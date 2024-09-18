@@ -1,0 +1,73 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution
+{
+public:
+    bool all_zero(vector<int> &counter)
+    {
+        for (int i = 0; i < counter.size(); ++i)
+        {
+            if (counter[i] != 0)
+                return false;
+        }
+        return true;
+    }
+
+    int search(string pat, string txt)
+    {
+        int m = pat.size();
+        int n = txt.size();
+
+        if (m > n)
+            return 0; // If pattern is larger than text, return 0.
+
+        vector<int> counter(26, 0); // Frequency array for a-z characters.
+
+        // Initialize the counter for the pattern.
+        for (int i = 0; i < m; ++i)
+        {
+            counter[pat[i] - 'a']++;
+        }
+
+        int ans = 0;
+        int i = 0;
+        int j = 0;
+
+        // Now start sliding window over the text.
+        while (j < n)
+        {
+            counter[txt[j] - 'a']--; // Decrease frequency of current character.
+          
+            // When window size matches pattern size
+            if (j - i + 1 == m)
+            {
+                if (all_zero(counter))
+                { 
+                    // Check if all frequencies are zero.
+                    ans++;
+                }
+                counter[txt[i] - 'a']++; // Slide the window by increasing the frequency of the left character.
+                i++;                     // Move left end of the window.
+            }
+            j++; // Move right end of the window.
+        }
+        return ans;
+    }
+};
+
+int main()
+{
+    int t;
+    cin >> t;
+    while (t--)
+    {
+        string pat, txt;
+        cin >> txt >> pat;
+        Solution ob;
+        auto ans = ob.search(pat, txt);
+        cout << ans << "\n";
+    }
+    return 0;
+}
+// } Driver Code Ends
